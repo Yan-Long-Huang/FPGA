@@ -6,5 +6,8 @@
 
 
 
-![image](https://user-images.githubusercontent.com/73886748/116922076-6a5d6480-ac87-11eb-90c0-7ef9ffa13c75.png)
-![image](https://user-images.githubusercontent.com/73886748/116922110-76e1bd00-ac87-11eb-9710-ec3664ed9960.png)
+![image](https://user-images.githubusercontent.com/73886748/116922076-6a5d6480-ac87-11eb-90c0-7ef9ffa13c75.png)  
+![image](https://user-images.githubusercontent.com/73886748/116922110-76e1bd00-ac87-11eb-9710-ec3664ed9960.png)  
+
+
+[作業報告 PPT 連結](https://niuo365-my.sharepoint.com/:p:/g/personal/b0742017_365_niu_edu_tw/EUaZQGgyulFOohFlYXYWGm8BEJ9NaV6CNpNAOt5eD1Vtbg?e=WwU5TO)  
