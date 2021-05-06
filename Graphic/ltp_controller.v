@@ -186,7 +186,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_B <= 8'd0;
 			end
 
-		else if (1*(x_cnt-250)*(x_cnt-250)+30*(y_cnt-165)*(y_cnt-165)>=1250 && 1*(x_cnt-250)*(x_cnt-250)+30*(y_cnt-165)*(y_cnt-165)<=2250)	// GOD_RING
+		else if (1*(x_cnt-250)**2+30*(y_cnt-165)**2>=1250 && 1*(x_cnt-250)**2+30*(y_cnt-165)**2<=2250)	// GOD_RING
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -195,7 +195,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd255;
 				oLCD_B <= 8'd0;
 			end
-		else if (5*(x_cnt-154)*(x_cnt-154)+1*(y_cnt-456)*(y_cnt-456)<=28)	// BONE
+		else if (5*(x_cnt-154)**2+1*(y_cnt-456)**2<=28)	// BONE
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -204,7 +204,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd255;
 				oLCD_B <= 8'd255;
 			end
-		else if (5*(x_cnt-154)*(x_cnt-154)+1*(y_cnt-457)*(y_cnt-457)<=140)	// ANKLE
+		else if (5*(x_cnt-154)**2+1*(y_cnt-457)**2<=140)	// ANKLE
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -213,7 +213,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if (4*(x_cnt-154)*(x_cnt-154)+1*(y_cnt-457)*(y_cnt-457)<=160)	// ANKLE_SKETCH
+		else if (4*(x_cnt-154)**2+1*(y_cnt-457)**2<=160)	// ANKLE_SKETCH
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -240,7 +240,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if (3*x_cnt+10*y_cnt>=3632 && 3*x_cnt+10*y_cnt<=3849 && ((x_cnt-287)*(x_cnt-287)+(y_cnt-285)*(y_cnt-285))<=4850)	// STICKMAN_LEFT_LOWER_ARM
+		else if (3*x_cnt+10*y_cnt>=3632 && 3*x_cnt+10*y_cnt<=3849 && ((x_cnt-287)**2+(y_cnt-285)**2)<=4850)	// STICKMAN_LEFT_LOWER_ARM
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -249,7 +249,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if ((x_cnt-250)*(x_cnt-250)+(y_cnt-215)*(y_cnt-215) <= 1250)	// draw circle: STICKMAN_HEAD
+		else if ((x_cnt-250)**2+(y_cnt-215)**2 <= 1250)	// draw circle: STICKMAN_HEAD
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -276,7 +276,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if (-3*x_cnt+1*y_cnt<=-415 && -35*x_cnt+1*y_cnt>=-9500 && y_cnt<=360 && (x_cnt-254)*(x_cnt-254)+(y_cnt-314)*(y_cnt-314)<=3500)	// STICKMAN_BODY
+		else if (-3*x_cnt+1*y_cnt<=-415 && -35*x_cnt+1*y_cnt>=-9500 && y_cnt<=360 && (x_cnt-254)**2+(y_cnt-314)**2<=3500)	// STICKMAN_BODY
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -285,7 +285,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 46;
 				oLCD_B <= 46;
 			end
-		else if (-3*x_cnt+1*y_cnt<=-400 && -35*x_cnt+1*y_cnt>=-9650 && y_cnt<=360 && (x_cnt-254)*(x_cnt-254)+(y_cnt-314)*(y_cnt-314)<=4100)	// STICKMAN_BODY_SKETCH
+		else if (-3*x_cnt+1*y_cnt<=-400 && -35*x_cnt+1*y_cnt>=-9650 && y_cnt<=360 && (x_cnt-254)**2+(y_cnt-314)**2<=4100)	// STICKMAN_BODY_SKETCH
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -312,7 +312,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if ((x_cnt-600)*(x_cnt-600)-1250*(y_cnt-300)<=0 && (x_cnt-600)*(x_cnt-600)-800*(y_cnt-300)>=0 && x_cnt<=600) // GROUND
+		else if ((x_cnt-600)**2-1250*(y_cnt-300)<=0 && (x_cnt-600)**2-800*(y_cnt-300)>=0 && x_cnt<=600) // GROUND
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -339,7 +339,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if ((x_cnt-367)*(x_cnt-367)+(y_cnt-372)*(y_cnt-372) <= 135) // draw circle: STICKMAN_RIGHT_KNEE
+		else if ((x_cnt-367)**2+(y_cnt-372)**2 <= 135) // draw circle: STICKMAN_RIGHT_KNEE
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -513,7 +513,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_B <= 8'd0;
 			end
 
-		else if (-1*x_cnt+20*y_cnt>=4832 && -1*x_cnt+20*y_cnt<=5209 && (x_cnt-330)*(x_cnt-330)+(y_cnt-255)*(y_cnt-255)<=7050)	// STICKMAN_RIGHT_ARM
+		else if (-1*x_cnt+20*y_cnt>=4832 && -1*x_cnt+20*y_cnt<=5209 && (x_cnt-330)**2+(y_cnt-255)**2<=7050)	// STICKMAN_RIGHT_ARM
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -522,7 +522,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if ((x_cnt-265)*(x_cnt-265)+(y_cnt-372)*(y_cnt-372)<=255)	// STICKMAN_BOTTOM
+		else if ((x_cnt-265)**2+(y_cnt-372)**2<=255)	// STICKMAN_BOTTOM
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -531,7 +531,7 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= 8'd0;
 				oLCD_B <= 8'd0;
 			end
-		else if (-1*(x_cnt-840)*(x_cnt-840)+3*(y_cnt-240)*(y_cnt-240)>=5250) // LIGHT
+		else if (-1*(x_cnt-840)**2+3*(y_cnt-240)**2>=5250) // LIGHT
 			begin
 				oHD	<= mhd;
 				oVD	<= mvd;
@@ -561,5 +561,5 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_B <= read_blue;
 			end
 	end
-				
+						
 endmodule
