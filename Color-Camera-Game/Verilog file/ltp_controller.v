@@ -18,17 +18,6 @@ module ltp_controller(
 						iclk_10ms,
 						iclk_1ms
 						);
-
-
-wire clk_sec_edge, clk_sec_edge2;
-reg [2:0] clk_sec_dly,clk_sec_dly2;
-assign clk_sec_edge = (clk_sec_dly[2] && !clk_sec_dly[1]) ? 1'b1:1'b0;
-assign clk_sec_edge2 =(clk_sec_dly2[2] && !clk_sec_dly2[1]) ? 1'b1:1'b0;
-input iclk_sec; 
-input iclk_100ms;
-input iclk_10ms;
-input iclk_1ms;
-
 //============================================================================
 // PARAMETER declarations
 //============================================================================
@@ -38,6 +27,7 @@ parameter Hsync_Blank = 46;   //H_SYNC + H_Back_Porch
 parameter Hsync_Front_Porch = 210;
 parameter Vertical_Back_Porch = 23; //V_SYNC + V_BACK_PORCH
 parameter Vertical_Front_Porch = 22;
+parameter run_left_edge = 1150;
 //===========================================================================
 // PORT declarations
 //===========================================================================
@@ -45,6 +35,10 @@ input			iCLK;
 input			iRST_n;
 input	[15:0]	iREAD_DATA1;
 input	[15:0]	iREAD_DATA2;
+input			iclk_sec; //clock_all time
+input			iclk_100ms;
+input			iclk_10ms;
+input			iclk_1ms;
 output			oREAD_SDRAM_EN;
 output	[7:0]	oLCD_R;		
 output  [7:0]	oLCD_G;
@@ -62,6 +56,7 @@ wire	[7:0]	read_green;
 wire	[7:0]	read_blue; 
 wire			display_area;
 wire			oREAD_SDRAM_EN;
+wire 			clk_sec_edge;
 reg				mhd;
 reg				mvd;
 reg				mden;
@@ -71,8 +66,8 @@ reg				oDEN;
 reg		[7:0]	oLCD_R;
 reg		[7:0]	oLCD_G;	
 reg		[7:0]	oLCD_B;
-reg [10:0] x_pos_run;
-parameter run_left_edge = 1245;
+reg		[2:0]	clk_sec_dly;
+reg		[10:0] 	x_pos_run = 11'd845;
 //=============================================================================
 // Structural coding
 //=============================================================================
@@ -94,6 +89,7 @@ assign	display_area = ((x_cnt>(Hsync_Blank-1)&& //>215
 assign	read_red 	= display_area ? iREAD_DATA2[9:2] : 8'b0;
 assign	read_green 	= display_area ? {iREAD_DATA1[14:10],iREAD_DATA2[14:12]}: 8'b0;
 assign	read_blue 	= display_area ? iREAD_DATA1[9:2] : 8'b0;
+assign clk_sec_edge = (clk_sec_dly[2] && !clk_sec_dly[1]) ? 1'b1:1'b0; //assign clk_sec_edge2 =(clk_sec_dly2[2] && !clk_sec_dly2[1]) ? 1'b1:1'b0;
 
 ///////////////////////// x  y counter  and lcd hd generator //////////////////
 always@(posedge iCLK or negedge iRST_n)
@@ -150,17 +146,7 @@ always@(posedge iCLK  or negedge iRST_n)
 	end			
 
 
-
-
-
-
-
-
-
-
-
-
-always@(posedge iCLK or negedge iRST_n)
+always@(posedge iCLK or negedge iRST_n) //Draw
 	begin
 		if (!iRST_n) //Background
 			begin
@@ -173,10 +159,9 @@ always@(posedge iCLK or negedge iRST_n)
 			end
 
 
-		else if (score(2,9,1));
-
-		else if (win(x_pos_run,512'd263));
-		else if (lose(255,51,0));
+		else if (score(2,9,1)); //SCORE: XXX
+		else if (win(x_pos_run,512'd263)); //CONGRATULATIONS
+		else if (lose(255,255,0)); //GAMEOVER
 
 		else
 			begin
@@ -187,38 +172,24 @@ always@(posedge iCLK or negedge iRST_n)
 				oLCD_G <= read_green/3;
 				oLCD_B <= read_blue/3;
 			end
-
-		if(!iRST_n)
-			x_pos_run = 0;
-		else
-			begin
-				clk_sec_dly <= {clk_sec_dly[1:0], iclk_10ms};
-				if(clk_sec_edge)
-				begin
-					if(x_pos_run==run_left_edge)
-						x_pos_run <= 0;
-					else
-						x_pos_run <= x_pos_run + 1;
-				end
-			end
 	end
 
-
-
-
-
-
-
-
-
-
-
-
+always@(posedge iCLK) // ...or negedge iRST_n
+begin
+	clk_sec_dly <= {clk_sec_dly[1:0], iclk_10ms};
+		if(clk_sec_edge)
+		begin
+			if(x_pos_run>=run_left_edge)
+				x_pos_run <= x_pos_run-run_left_edge;
+			else
+				x_pos_run <= x_pos_run + 2;
+		end
+end
 
 function [0:0] SEG16;			//	   ──[0]── ──[1]──  
 	input [15:0] light_up;		//	  |  ╲    |    ╱  | 
-	input [10:0] x_pos;			//	 [2] [3] [4] [5] [6]
-	input [9:0]  y_pos;			//	  |    ╲  |  ╱    | 
+	input [11:0] x_pos;			//	 [2] [3] [4] [5] [6]
+	input [10:0] y_pos;			//	  |    ╲  |  ╱    | 
 	input [7:0]color_r;			//	   ──[7]── ──[8]──    <= [bit of light_up]
 	input [7:0]color_g;			//	  |    ╱  |  ╲    |      type & copy --> 1010000111000111
 	input [7:0]color_b;			//	 [9][10][11][12][13]                     ||||||||||||||||                 
@@ -298,9 +269,9 @@ function [0:0] number; // number 0~9
 endfunction
 
 function [0:0] score;
-	input num_100;
-	input num_10;
-	input num_1;
+	input [4:0] num_100;
+	input [4:0] num_10;
+	input [4:0] num_1;
 	begin
 		if 	 ((SEG16(16'b1110000110000111,1024'd766,512'd119,8'd255,8'd51 ,8'd153)) //S
 			||(SEG16(16'b1100001000000111,1024'd686,512'd119,8'd255,8'd51 ,8'd153)) //C
@@ -321,7 +292,6 @@ endfunction
 function [0:0] win;
 	input [10:0] x_pos;
 	input [9:0]  y_pos;
-
 	begin
 		if ((SEG16(16'b1100001000000111,x_pos_correction(x_pos+67*14),y_pos,8'd255,8'd0  ,8'd0  ))|| //C
 			(SEG16(16'b1110001001000111,x_pos_correction(x_pos+67*13),y_pos,8'd255,8'd102,8'd0  ))|| //O
@@ -345,17 +315,17 @@ function [0:0] win;
 	end
 endfunction
 
-function [10:0] x_pos_correction;
-	input [10:0] x_pos;
+function [11:0] x_pos_correction;
+	input [11:0] x_pos;
 	begin
-		if(x_pos>=1245)
+		if(x_pos >= run_left_edge)
 			x_pos_correction = x_pos-run_left_edge;
 		else
-			x_pos_correction = x_pos;
+			x_pos_correction =  x_pos;
 	end
 endfunction
 
-function [0:0] lose;
+function [0:0] lose; //GAMEOVER
 	input [7:0]color_r;
 	input [7:0]color_g;
 	input [7:0]color_b;
@@ -373,7 +343,4 @@ function [0:0] lose;
 			lose=1'b0;
 	end
 endfunction
-
-
 endmodule
-
